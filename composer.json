@@ -18,7 +18,7 @@
     "extra": {
         "download-dist": [
             {
-                "url": "https://github.com/teamnovu/teamnovu/nova-external-url/releases/download/{$version}/dist.tar.gz",
+                "url": "https://github.com/teamnovu/nova-external-url/releases/download/{$version}/dist.tar.gz",
                 "path": "vendor/teamnovu/nova-external-url/dist"
             }
         ],
