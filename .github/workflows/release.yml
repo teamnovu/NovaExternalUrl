@@ -30,11 +30,9 @@ jobs:
       - name: Create dist zip
         run: tar -czvf dist.tar.gz dist
 
-      - name: Get Changelog
-        id: changelog
-        uses: statamic/changelog-action@v1
-        with:
-          version: ${{ github.ref }}
+      - name: Set output
+        id: vars
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
       - name: Create release
         id: create_release
@@ -42,9 +40,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.changelog.outputs.version }}
-          release_name: ${{ steps.changelog.outputs.version }}
-          body: ${{ steps.changelog.outputs.text }}
+          tag_name: ${{ steps.vars.outputs.tag }}
+          release_name: ${{ steps.vars.outputs.tag }}
 
       - name: Upload dist zip to release
         uses: actions/upload-release-asset@v1.0.1
