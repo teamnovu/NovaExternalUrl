@@ -1,13 +1,12 @@
 name: "Update Assets"
 
 on:
-  workflow_dispatch:
   push:
-    branches: [main]
-  pull_request:
+    tags:
+      - 'v*'
 
 jobs:
-  update:
+  build:
     name: Update assets
 
     runs-on: ubuntu-latest
@@ -23,11 +22,36 @@ jobs:
 
       - name: Compile Asset
         run: |
+          npm ci
           npm run prod
         env:
           TAILWIND_MODE: build
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+      - name: Create dist zip
+        run: tar -czvf dist.tar.gz dist
+
+      - name: Get Changelog
+        id: changelog
+        uses: statamic/changelog-action@v1
         with:
-          commit_message: Update Assets
+          version: ${{ github.ref }}
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.changelog.outputs.version }}
+          release_name: ${{ steps.changelog.outputs.version }}
+          body: ${{ steps.changelog.outputs.text }}
+
+      - name: Upload dist zip to release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist.tar.gz
+          asset_name: dist.tar.gz
+          asset_content_type: application/tar+gz
