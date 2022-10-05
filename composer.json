@@ -1,0 +1,36 @@
+{
+    "name": "teamnovu/nova-external-url",
+    "description": "A Laravel Nova field.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "laravel/nova": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Teamnovu\\NovaExternalUrl\\": "src/"
+        }
+    },
+    "extra": {
+        "download-dist": [
+            {
+                "url": "https://github.com/teamnovu/teamnovu/nova-external-url/releases/download/{$version}/dist.tar.gz",
+                "path": "vendor/teamnovu/nova-external-url/dist"
+            }
+        ],
+        "laravel": {
+            "providers": [
+                "Teamnovu\\NovaExternalUrl\\FieldServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
